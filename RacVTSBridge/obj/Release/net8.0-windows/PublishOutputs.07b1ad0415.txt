@@ -1,0 +1,10 @@
+G:\RacVTSBridgeD\RacVTSBridge.exe
+G:\RacVTSBridgeD\RacVTSBridge.dll
+G:\RacVTSBridgeD\RacVTSBridge.deps.json
+G:\RacVTSBridgeD\RacVTSBridge.runtimeconfig.json
+G:\RacVTSBridgeD\RacVTSBridge.pdb
+G:\RacVTSBridgeD\Newtonsoft.Json.dll
+G:\RacVTSBridgeD\SuperSocket.ClientEngine.dll
+G:\RacVTSBridgeD\VTS.dll
+G:\RacVTSBridgeD\WebSocket4Net.dll
+G:\RacVTSBridgeD\websocket-sharp.dll
