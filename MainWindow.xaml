@@ -1,0 +1,143 @@
+<Window x:Class="RacVTSBridge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RacVTSBridge - 赛车游戏加速度桥接"
+        Width="480" Height="720"
+        MinWidth="440" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        Background="#F5F5F5">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" x:Name="TitleText" Text="RacVTSBridge - 赛车游戏加速度桥接"
+                   FontSize="18" FontWeight="Bold" Foreground="#333333"
+                   Margin="0,0,0,16"/>
+
+        <!-- 运行模式 + 语言切换 -->
+        <Grid Grid.Row="1" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock x:Name="ModeLabel" Text="运行模式:" FontWeight="Bold" Foreground="#333333" Margin="0,0,0,6"/>
+                <ComboBox x:Name="ModeComboBox" Width="200" Height="26" FontSize="13"
+                          SelectionChanged="ModeComboBox_SelectionChanged">
+                    <ComboBoxItem Content="本地模式" Tag="Local" IsSelected="True"/>
+                    <ComboBoxItem Content="发送端（游戏主机）" Tag="Sender"/>
+                    <ComboBoxItem Content="接收端（推流机）" Tag="Receiver"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="10,0,0,0">
+                <TextBlock Text="Language: " VerticalAlignment="Center" FontSize="12" Foreground="#666666"/>
+                <ComboBox x:Name="LangComboBox" Width="80" Height="26"
+                          SelectionChanged="LangComboBox_SelectionChanged" FontSize="12">
+                    <ComboBoxItem Content="中文" Tag="CN" IsSelected="True"/>
+                    <ComboBoxItem Content="English" Tag="EN"/>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+
+        <!-- 游戏类型选择（本地/发送端模式显示） -->
+        <DockPanel x:Name="GameTypePanel" Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock x:Name="GameTypeLabel" Text="游戏类型:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <ComboBox x:Name="GameTypeComboBox" FontSize="14" Height="26"
+                      SelectionChanged="GameTypeComboBox_SelectionChanged">
+                <ComboBoxItem Content="极限竞速 (Forza)" Tag="Forza" IsSelected="True"/>
+                <ComboBoxItem Content="神力科莎系列 (AC Series)" Tag="AC"/>
+                <ComboBoxItem Content="欧卡美卡 (ETS2/ATS)" Tag="ETS2"/>
+            </ComboBox>
+        </DockPanel>
+
+        <!-- Forza UDP 端口（本地/发送端 + Forza 游戏时显示） -->
+        <DockPanel x:Name="ForzaPortPanel" Grid.Row="3" Margin="0,0,0,10">
+            <TextBlock x:Name="UdpPortLabel" Text="UDP 端口:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <TextBox x:Name="UdpPortTextBox" Text="5300" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 目标IP（发送端模式显示） -->
+        <DockPanel x:Name="TargetIpPanel" Grid.Row="4" Margin="0,0,0,10" Visibility="Collapsed">
+            <TextBlock x:Name="TargetIpLabel" Text="目标IP地址:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <TextBox x:Name="TargetIpTextBox" Text="192.168.1.100" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 目标端口（发送端模式显示） -->
+        <DockPanel x:Name="TargetPortPanel" Grid.Row="5" Margin="0,0,0,10" Visibility="Collapsed">
+            <TextBlock x:Name="TargetPortLabel" Text="目标端口:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <TextBox x:Name="TargetPortTextBox" Text="9000" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 监听端口（接收端模式显示） -->
+        <DockPanel x:Name="ListenPortPanel" Grid.Row="4" Margin="0,0,0,10" Visibility="Collapsed">
+            <TextBlock x:Name="ListenPortLabel" Text="监听端口:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <TextBox x:Name="ListenPortTextBox" Text="9000" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- VTS 端口（本地/接收端模式显示） -->
+        <DockPanel x:Name="VtsPortPanel" Grid.Row="6" Margin="0,0,0,10">
+            <TextBlock x:Name="VtsPortLabel" Text="VTube Studio 端口:" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold"/>
+            <TextBox x:Name="VtsPortTextBox" Text="8001" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 参数名 X（本地/接收端模式显示） -->
+        <DockPanel x:Name="ParamXPanel" Grid.Row="7" Margin="0,0,0,10">
+            <TextBlock x:Name="ParamXLabel" Text="参数名 (横向加速度):" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            <TextBox x:Name="ParamXTextBox" Text="AccelerationX" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 参数名 Z（本地/接收端模式显示） -->
+        <DockPanel x:Name="ParamZPanel" Grid.Row="8" Margin="0,0,0,14">
+            <TextBlock x:Name="ParamZLabel" Text="参数名 (前后加速度):" Width="120" VerticalAlignment="Center" Foreground="#333333" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            <TextBox x:Name="ParamZTextBox" Text="AccelerationZ" FontSize="14" Padding="6,4"/>
+        </DockPanel>
+
+        <!-- 游戏/模式说明 -->
+        <Border x:Name="GameInfoBorder" Grid.Row="9" Background="#E3F2FD" BorderBrush="#2196F3" BorderThickness="1"
+                CornerRadius="4" Padding="10" Margin="0,0,0,12">
+            <TextBlock x:Name="GameInfoText" Text="极限竞速模式: 通过 UDP 接收 Forza Horizon 5 数据"
+                       Foreground="#1565C0" FontSize="12" TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- 启动按钮 -->
+        <Button x:Name="StartButton" Grid.Row="10" Content="启动" Click="StartButton_Click"
+                Background="#4A90D9" Foreground="White" FontWeight="Bold"
+                FontSize="16" Height="44" Margin="0,0,0,12"/>
+
+        <!-- 状态栏 -->
+        <Border Grid.Row="11" Background="#E8E8E8" BorderBrush="#CCCCCC" BorderThickness="1"
+                CornerRadius="4" Padding="12,8" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock x:Name="StatusLabel" Text="状态" Foreground="#666666" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                <TextBlock x:Name="StatusText" Text="就绪 - 选择游戏类型后点击「启动」"
+                           Foreground="#D32F2F" FontSize="14" TextWrapping="Wrap" FontWeight="Bold" Margin="0,0,0,2"/>
+                <TextBlock x:Name="DataText" Text=""
+                           Foreground="#1565C0" FontFamily="Consolas" FontSize="13" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 底部提示 -->
+        <StackPanel Grid.Row="12" Margin="0,8,0,0">
+            <TextBlock x:Name="HintText" Text="提示：VTube Studio 需开启「启用 API」，Forza 需设置数据输出端口，AC/ETS2 需运行游戏"
+                       Foreground="#999999" FontSize="11" TextWrapping="Wrap"/>
+            <TextBlock x:Name="CreditText" Text="B站左舷基于TRAE Solo创作，加q群954463059联系"
+                       Foreground="#666666" FontSize="10" Margin="0,12,0,0" TextWrapping="Wrap" FontStyle="Italic"/>
+        </StackPanel>
+    </Grid>
+</Window>
